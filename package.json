@@ -1,7 +1,8 @@
 {
   "name": "deeplink-landing",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "private": true,
+  "homepage": "https://decentraland.github.io/deeplink-landing/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
