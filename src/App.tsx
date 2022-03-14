@@ -15,7 +15,7 @@ function App() {
     const params = new URLSearchParams(window.location.search)
     const position = params.get('position')
     return String(position || '').split(',').slice(0,2).map(toNumber)
-  }, [ window.location.search ])
+  }, [])
 
   useEffect(() => {
     if (!launched && ref.current) {
@@ -34,12 +34,12 @@ function App() {
         setInstalled(installed)
       }, 500);
     }
-  }, [ ref.current, x, y, launched ])
+  }, [ ref, x, y ])
 
   return (
     <div className="App">
       <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <img src="https://decentraland.org/logos/svg/color-dark-text.svg" width="863" height="144" style={{ width: '100%', height: 'auto', maxWidth: '500px' }} />
+        <img alt="decentraland" src="https://decentraland.org/logos/svg/color-dark-text.svg" width="863" height="144" style={{ width: '100%', height: 'auto', maxWidth: '500px' }} />
         {installed === null && <p style={{ visibility: 'hidden' }}>Loading...</p>}
         {installed === false && <p>❌ Not installed! ❌</p>}
         {installed === true && <p>✅ Installed! ✅ </p>}
