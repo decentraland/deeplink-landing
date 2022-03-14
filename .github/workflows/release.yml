@@ -21,9 +21,7 @@ jobs:
           cache: 'npm'
 
       - name: installing
-        run: npm ci
-        env:
-          CI: false
+        run: CI=false npm ci
 
       - name: building
         run: npm run build
