@@ -1,24 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useMemo } from 'react';
 import './App.css';
 
+let launched = false
+
+function toNumber(value: any): number {
+  const num = Number(value)
+  return Number.isFinite(num) ? num : 0
+}
+
 function App() {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [ installed, setInstalled ] = React.useState<boolean | null>(null)
+  const [x, y] = useMemo(() => {
+    const params = new URLSearchParams(window.location.search)
+    const position = params.get('position')
+    return String(position || '').split(',').slice(0,2).map(toNumber)
+  }, [ window.location.search ])
+
+  useEffect(() => {
+    if (!launched && ref.current) {
+      launched = true
+      let installed = false
+      const isInstalled = () => { installed = true }
+      window.addEventListener('blur', isInstalled);
+
+      const iframe = document.createElement('iframe')
+      iframe.setAttribute('style', 'display: none')
+      iframe.src = `dcl://position=${x},${y}`
+
+      ref.current.appendChild(iframe)
+      setTimeout(() => {
+        window.removeEventListener('blur', isInstalled)
+        setInstalled(installed)
+      }, 500);
+    }
+  }, [ ref.current, x, y, launched ])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{ padding: '1rem', textAlign: 'center' }}>
+        <img src="https://decentraland.org/logos/svg/color-dark-text.svg" width="863" height="144" style={{ width: '100%', height: 'auto', maxWidth: '500px' }} />
+        {installed === null && <p style={{ visibility: 'hidden' }}>Loading...</p>}
+        {installed === false && <p>❌ Not installed! ❌</p>}
+        {installed === true && <p>✅ Installed! ✅ </p>}
+      </div>
+      <div ref={ref} />
     </div>
   );
 }
