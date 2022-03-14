@@ -14,7 +14,8 @@ function App() {
   const [x, y] = useMemo(() => {
     const params = new URLSearchParams(window.location.search)
     const position = params.get('position')
-    return String(position || '').split(',').slice(0,2).map(toNumber)
+    const [x,y] = String(position || '').split(',').slice(0,2)
+    return [toNumber(x), toNumber(y)] as const
   }, [])
 
   useEffect(() => {
